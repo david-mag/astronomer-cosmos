@@ -152,11 +152,11 @@ test = 'pytest -vv --durations=0 . -m "not integration" --ignore=tests/test_exam
 test-cov = 'pytest -vv --cov=cosmos --cov-report=term-missing --cov-report=xml --durations=0 -m "not integration" --ignore=tests/test_example_dags.py --ignore=tests/test_example_dags_no_connections.py'
 # we install using the following workaround to overcome installation conflicts, such as:
 # apache-airflow 2.3.0 and dbt-core [0.13.0 - 1.5.2] and jinja2>=3.0.0 because these package versions have conflicting dependencies
-test-integration-setup = """pip uninstall dbt-postgres dbt-databricks; \
+test-integration-setup = """pip uninstall dbt-postgres dbt-databricks dbt-sqlite; \
 rm -rf airflow.*; \
 airflow db init; \
-pip install 'dbt-postgres<=1.5' 'dbt-databricks<=1.5'"""
-test-integration-expensive-setup = """pip uninstall dbt-postgres dbt-databricks; \
+pip install 'dbt-postgres<=1.5' 'dbt-databricks<=1.5' 'dbt-sqlite'"""
+test-integration-expensive-setup = """pip uninstall dbt-postgres dbt-databricks dbt-sqlite<=1.4; \
 rm -rf airflow.*; \
 airflow db init; \
 pip install 'dbt-postgres<=1.4' 'dbt-databricks<=1.4' 'dbt-sqlite<=1.4'"""
@@ -167,7 +167,7 @@ pytest -vv \
 --cov-report=xml \
 --durations=0 \
 -m integration  \
--k 'not (test_example_dags[example_cosmos_sources] or test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv])'
+-k 'not (example_cosmos_sources or example_cosmos_python_models or example_virtualenv)'
 """
 test-integration-expensive = """rm -rf dbt/jaffle_shop/dbt_packages;
 pytest -vv \
@@ -176,7 +176,7 @@ pytest -vv \
 --cov-report=xml \
 --durations=0 \
 -m integration  \
--k 'test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv] or test_example_dags[example_cosmos_sources]'"""
+-k 'example_cosmos_sources or example_cosmos_python_models or example_virtualenv'"""
 
 [tool.pytest.ini_options]
 filterwarnings = [
