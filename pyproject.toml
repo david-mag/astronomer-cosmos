@@ -155,6 +155,10 @@ test-cov = 'pytest -vv --cov=cosmos --cov-report=term-missing --cov-report=xml -
 test-integration-setup = """pip uninstall dbt-postgres dbt-databricks; \
 rm -rf airflow.*; \
 airflow db init; \
+pip install 'dbt-postgres<=1.5' 'dbt-databricks<=1.5'"""
+test-integration-expensive-setup = """pip uninstall dbt-postgres dbt-databricks; \
+rm -rf airflow.*; \
+airflow db init; \
 pip install 'dbt-postgres<=1.4' 'dbt-databricks<=1.4' 'dbt-sqlite<=1.4'"""
 test-integration = """rm -rf dbt/jaffle_shop/dbt_packages;
 pytest -vv \
@@ -163,7 +167,7 @@ pytest -vv \
 --cov-report=xml \
 --durations=0 \
 -m integration  \
--k 'not (test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv])'
+-k 'not (test_example_dags[example_cosmos_sources] or test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv])'
 """
 test-integration-expensive = """rm -rf dbt/jaffle_shop/dbt_packages;
 pytest -vv \
@@ -172,7 +176,7 @@ pytest -vv \
 --cov-report=xml \
 --durations=0 \
 -m integration  \
--k 'test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv]'"""
+-k 'test_example_dags_no_connections[example_cosmos_python_models] or test_example_dag[example_cosmos_python_models] or test_example_dag[example_virtualenv] or test_example_dags[example_cosmos_sources]'"""
 
 [tool.pytest.ini_options]
 filterwarnings = [
