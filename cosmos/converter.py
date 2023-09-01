@@ -105,7 +105,6 @@ class DbtToAirflowConverter:
     ) -> None:
         project_config.validate_project()
 
-        emit_datasets = render_config.emit_datasets
         dbt_root_path = project_config.dbt_project_path.parent
         dbt_project_name = project_config.dbt_project_path.name
         dbt_models_dir = project_config.models_relative_path
@@ -119,10 +118,10 @@ class DbtToAirflowConverter:
         load_mode = render_config.load_method
         manifest_path = project_config.parsed_manifest_path
         dbt_executable_path = execution_config.dbt_executable_path
+        dbt_resource_converter = render_config.dbt_resource_converter
 
-        conn_id = "unknown"
         if profile_config and profile_config.profile_mapping:
-            conn_id = profile_config.profile_mapping.conn_id
+            pass
 
         profile_args = {}
         if profile_config.profile_mapping:
@@ -170,7 +169,6 @@ class DbtToAirflowConverter:
             task_args=task_args,
             test_behavior=test_behavior,
             dbt_project_name=dbt_project.name,
-            conn_id=conn_id,
             on_warning_callback=on_warning_callback,
-            emit_datasets=emit_datasets,
+            dbt_resource_converter=dbt_resource_converter,
         )
