@@ -81,7 +81,7 @@ def create_task_metadata(node: DbtNode, execution_mode: ExecutionMode, args: dic
         )
         return task_metadata
     else:
-        logger.error(f"Unsupported resource type {node.resource_type} (node {node.unique_id}).")
+        logger.warning(f"Unsupported resource type {node.resource_type} (node {node.unique_id}).")
         return None
 
 
